@@ -38,7 +38,6 @@ function as_theme_page_attachments_alter(array &$page) {
  * Implements hook_preprocess_page() for page.html.twig.
  */
 function as_theme_preprocess_page(array &$variables) {
-
 }
 
 /**
@@ -89,21 +88,17 @@ function as_theme_theme_suggestions_fieldset_alter(array &$suggestions, array $v
  * Implements hook_preprocess_node().
  */
 function as_theme_preprocess_node(array &$variables) {
-  // Default to turning off byline/submitted.
-  //$variables['display_submitted'] = FALSE;
-  if ($variables['node']->getType() == 'livre') {
+
+  if ($variables['node']->getType() == 'as_book') {
+
     if ($variables['view_mode'] == 'full') {
 
-      //$form = \Drupal::formBuilder()->getForm('\Drupal\as_book\Form\BookReservationForm');
-
-      //$form['book_id']['#value'] = $variables['node']->id();
-      //$form['user_id']['#value'] = $variables['user']->id();
-
-      //$variables['reservation_form'] = $form;
+      // $form = \Drupal::formBuilder()->getForm('\Drupal\as_book\Form\BookReservationForm');
+      // $form['book_id']['#value'] = $variables['node']->id();
+      // $form['user_id']['#value'] = $variables['user']->id();
+      // $variables['reservation_form'] = $form;
     }
-
   }
-
 }
 
 /**

@@ -5,14 +5,14 @@ namespace Drupal\as_book\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 
 /**
- * Provides a 'BookBLock' block.
+ * Provides a 'ReservationFormBlock' block.
  *
  * @Block(
- *  id = "book_block",
- *  admin_label = @Translation("Book block"),
+ *  id = "reservation_form_block",
+ *  admin_label = @Translation("Reservation form block"),
  * )
  */
-class BookBLock extends BlockBase {
+class ReservationFormBlock extends BlockBase {
 
   /**
    * {@inheritdoc}
@@ -22,20 +22,16 @@ class BookBLock extends BlockBase {
     $current_uri = \Drupal::request()->getRequestUri();
     $book_id = str_replace('/node/', '', $current_uri);
     $current_user = \Drupal::currentUser();
-
     $user_id = $current_user->id();
 
     $form = \Drupal::formBuilder()->getForm('\Drupal\as_book\Form\BookReservationForm');
     $form['book_id']['#value'] = $book_id;
     $form['user_id']['#value'] = $user_id;
 
-    //$form['book_id']['#value'] = ;
-    //$form['user_id']['#value'] = ;
-
-    $build['reservation_form'] = $form;
+    $build = [];
+    $build['reservation_form_block'] = $form;
 
     return $build;
   }
-
 
 }

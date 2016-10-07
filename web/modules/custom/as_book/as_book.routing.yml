@@ -7,6 +7,14 @@ as_book.default_controller_bookListing:
   requirements:
     _permission: 'access content'
 
+as_book.default_controller_searchEngine:
+  path: 'book/search'
+  defaults:
+    _controller: '\Drupal\as_book\Controller\DefaultController::searchEngine'
+    _title: 'Your search'
+  requirements:
+    _permission: 'access content'
+
 as_book.book_reservation_form:
   path: '/as_book/form/book_reservation'
   defaults:
@@ -14,12 +22,12 @@ as_book.book_reservation_form:
     _title: 'BookReservationForm'
   requirements:
     _permission: 'access book reservation form'
+    _permission: 'access content'
 
-as_book.search_form:
-  path: '/as_book/form/search'
+as_book.search_engine_form:
+  path: '/as_book/form/search_engine'
   defaults:
-    _form: '\Drupal\as_book\Form\searchForm'
-    _title: 'searchForm'
+    _form: '\Drupal\as_book\Form\SearchEngineForm'
+    _title: 'SearchEngineForm'
   requirements:
     _access: 'TRUE'
-  

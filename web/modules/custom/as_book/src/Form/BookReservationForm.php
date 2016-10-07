@@ -25,25 +25,28 @@ class BookReservationForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    $current_user = \Drupal::currentUser();
+    // Get the current user
+    $user = \Drupal::currentUser();
 
-    if ($current_user->hasPermission('acces book reservation form')) {
+    if ($user->hasPermission('access book reservation form')) {
+
       $form['book_id'] = [
-        '#type' => 'textfield',
+        '#type' => 'hidden',
       ];
+
       $form['user_id'] = [
         '#type' => 'hidden',
       ];
 
       $form['submit'] = [
           '#type' => 'submit',
-          '#value' => t('book me'),
+          '#value' => t('Book me !'),
       ];
 
       return $form;
     }
 
-    return ['#markup' => 'veuillez vous connecter pour reserver le livre' ];
+    return ['#markup' => 'Veuillez vous connecter pour réserver le livre.'];
 
   }
 
@@ -64,12 +67,12 @@ class BookReservationForm extends FormBase {
     $invalid_book_id = $original_book_id != $submitted_book_id;
     $invalid_user_id = $original_user_id != $submitted_user_id;
 
-    if ($invalid_user_id || $invalid_book_id) {
-      $form_state->setError($form['book_id'], 'Mauvais format de donnée');
+    if ($invalid_book_id || $invalid_user_id) {
+      $form_state->setErrorByName('book_id', $this->t('Mauvais format de donnée'));
     }
 
     if ($current_user->isAnonymous()) {
-      $form_state->setError($form['user_id'], 'tu ne fais pas partie du harem');
+      $form_state->setErrorByName('user_id', $this->t('Utilisateur non connecté'));
     }
   }
 
@@ -77,25 +80,23 @@ class BookReservationForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Display result.
 
     $book_id = $form_state->getValue('book_id');
     $user_id = $form_state->getValue('user_id');
 
-    $nodes = \Drupal\node\Entity\Node::create([
+    $node = \Drupal\node\Entity\Node::create([
       'type' => 'reservation',
-      'title' => 'Réservation num' . $book_id . '-' . $user_id,
+      'title' => 'Réservation N° ' . $book_id . '-' . $user_id,
       'status' => 1,
-      'field_livre' => $book_id,
-      'field_suscriber' => $user_id
+      'field_book' => $book_id,
+      'field_subscriber' => $user_id,
     ]);
 
-    if ($nodes->save()) {
-      drupal_set_message('Participation reussis', 'status');
+    if ($node->save()) {
+      drupal_set_message('La réservation a bien été prise en compte.', 'status');
     }
-
-    foreach ($form_state->getValues() as $key => $value) {
-        drupal_set_message($key . ': ' . $value);
+    else {
+      drupal_set_message('Problème de réservation.', 'error');
     }
 
   }
